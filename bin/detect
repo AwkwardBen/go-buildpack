@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+# bin/detect <build-dir>
+set -e
+
+build=$(cd "$1/" && pwd)
+
+if test -f "${build}/vendor/vendor.json" then
+  echo 0
+else
+  exit 1
+fi

@@ -1,0 +1,47 @@
+#!/bin/bash
+# usage: bin/compile <build-dir> <cache-dir> <env-dir>
+
+set -eo pipefail
+
+mkdir -p "$1" "$2"
+build_dir=$(cd "$1/" && pwd)
+cache_dir=$(cd "$2/" && pwd)
+env_dir="${3}"
+
+buildpack=$(cd "$(dirname $0)/.." && pwd)
+source "${buildpack}/lib/common.sh"
+
+DefaultGoVersion="$(<${DataJSON} jq -r '.Go.DefaultVersion')"\
+GovendorVersion="$(<${DataJSON} jq -r '.Govendor.DefaultVersion')"
+goPath="${cache_dir}/${DefaultGoVersion}/go"
+   
+rm -rf ${cache_dir}/*
+goFile="${DefaultGoVersion}.linux-amd64.tar.gz"
+
+ensureFile "${goFile}" "${goPath}" "tar -C ${goPath} --strip-components=1 -zxf"
+rm -f "${goPath}/${goFile}"
+
+export GOROOT="${goPath}"
+export PATH="${goPath}/bin:${PATH}"
+
+mkdir -p "${build_dir}/bin"
+
+export GOPATH
+
+ensureInPath "govendor_linux_amd64" "${cache}/govendor/bin"
+
+eval "$(setupGOPATH ${name})"
+vendorJSON="${src}/vendor/vendor.json"
+
+pkgs=${GO_INSTALL_PACKAGE_SPEC:-$(<${vendorJSON} jq -r 'if .heroku.install then .heroku.install | join(" ") else "default" end')}
+cd "${src}"
+
+go install -v "${FLAGS[@]}" ${pkgs} 2>&1
+
+mv -t "${build_dir}" "${src}/Procfile"
+
+cd $build_dir
+mkdir -p $build/.profile.d
+echo 'PATH=$PATH:$HOME/bin' > $build/.profile.d/go.sh
+
+
