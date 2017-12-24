@@ -12,16 +12,13 @@ buildpack=$(cd "$(dirname $0)/.." && pwd)
 source "${buildpack}/lib/common.sh"
 ensureInPath "jq-linux64" "${cache_dir}/.jq/bin"
 
-DefaultGoVersion="$(<${DataJSON} jq -r '.Go.DefaultVersion')"\
+DefaultGoVersion="$(<${DataJSON} jq -r '.Go.DefaultVersion')"
 GovendorVersion="$(<${DataJSON} jq -r '.Govendor.DefaultVersion')"
 goPath="${cache_dir}/${DefaultGoVersion}/go"
    
 rm -rf ${cache_dir}/*
 goFile="${DefaultGoVersion}.linux-amd64.tar.gz"
 
-echo $goFile
-echo $goPath
-tar --help
 ensureFile "${goFile}" "${goPath}" "tar -C ${goPath} --strip-components=1 -zxf"
 rm -f "${goPath}/${goFile}"
 
