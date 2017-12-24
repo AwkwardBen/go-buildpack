@@ -19,6 +19,9 @@ goPath="${cache_dir}/${DefaultGoVersion}/go"
 rm -rf ${cache_dir}/*
 goFile="${DefaultGoVersion}.linux-amd64.tar.gz"
 
+echo $goFile
+echo $goPath
+tar --help
 ensureFile "${goFile}" "${goPath}" "tar -C ${goPath} --strip-components=1 -zxf"
 rm -f "${goPath}/${goFile}"
 
