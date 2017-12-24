@@ -9,7 +9,7 @@ RED='\033[1;31m'
 NC='\033[0m' # No Color
 DataJSON="${buildpack}/data.json"
 FilesJSON="${buildpack}/files.json"
-vendorJSON="${build}/vendor/vendor.json"
+vendorJSON="${build_dir}/vendor/vendor.json"
 CURL="curl -s -L --retry 15 --retry-delay 2"
 BucketURL="https://heroku-golang-prod.s3.amazonaws.com"
 
@@ -67,13 +67,13 @@ setupGOPATH() {
     local name="${1}"
     local t="$(mktemp -d)"
 
-    cp -R ${build}/* ${t}
+    cp -R ${build_dir}/* ${t}
     GOPATH="${t}/.go"
-    echo export GOBIN="${build}/bin"
+    echo export GOBIN="${build_dir}/bin"
 
     src="${GOPATH}/src/${name}"
     mkdir -p "${src}"
-    mkdir -p "${build}/bin"
+    mkdir -p "${build_dir}/bin"
     mv -t "${src}" "${t}"/*
 
     echo "GOPATH=${GOPATH}"
