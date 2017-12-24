@@ -15,6 +15,10 @@ start() {
     echo -n "$steptxt $@... "
 }
 
+finished() {
+    echo "done"
+}
+
 ensureInPath() {
     local fileName="${1}"
     local targetDir="${2}"
