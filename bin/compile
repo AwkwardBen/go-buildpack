@@ -10,7 +10,7 @@ env_dir="${3}"
 
 buildpack=$(cd "$(dirname $0)/.." && pwd)
 source "${buildpack}/lib/common.sh"
-ensureInPath "jq-linux64" "${cache}/.jq/bin"
+ensureInPath "jq-linux64" "${cache_dir}/.jq/bin"
 
 DefaultGoVersion="$(<${DataJSON} jq -r '.Go.DefaultVersion')"\
 GovendorVersion="$(<${DataJSON} jq -r '.Govendor.DefaultVersion')"
