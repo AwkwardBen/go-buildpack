@@ -42,19 +42,6 @@ ensureFile() {
     downloadFile "${fileName}" "${targetDir}" "${xCmd}"
 }
 
-SHAValid() {
-    local fileName="${1}"
-    local targetFile="${2}"
-    local sh=""
-    local sw="$(<"${FilesJSON}" jq -r '."'${fileName}'".SHA')"
-    if [ ${#sw} -eq 40 ]; then
-        sh="$(shasum "${targetFile}" | cut -d \  -f 1)"
-    else
-        sh="$(shasum -a256 "${targetFile}" | cut -d \  -f 1)"
-    fi
-    [ "${sh}" = "${sw}" ]
-}
-
 downloadFile() {
     local fileName="${1}"
     local targetDir="${2}"
@@ -71,13 +58,6 @@ downloadFile() {
             fi
             if [ -n "${xCmd}" ]; then
                 ${xCmd} ${targetFile}
-            fi
-            if ! SHAValid "${fileName}" "${targetFile}"; then
-                err ""
-                err "Downloaded file (${fileName}) sha does not match recorded SHA"
-                err "Unable to continue."
-                err ""
-                exit 1
             fi
         finished
     popd &> /dev/null
