@@ -5,6 +5,8 @@ if [ -z "${buildpack}" ]; then
 fi
 
 steptxt="----->"
+RED='\033[1;31m'
+NC='\033[0m' # No Color
 DataJSON="${buildpack}/data.json"
 FilesJSON="${buildpack}/files.json"
 vendorJSON="${build}/vendor/vendor.json"
@@ -13,6 +15,10 @@ BucketURL="https://heroku-golang-prod.s3.amazonaws.com"
 
 start() {
     echo -n "$steptxt $@... "
+}
+
+err() {
+    echo -e >&2 "${RED} !!    $@${NC}"
 }
 
 finished() {
