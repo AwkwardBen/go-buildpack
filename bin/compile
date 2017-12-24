@@ -29,7 +29,7 @@ mkdir -p "${build_dir}/bin"
 
 export GOPATH
 
-ensureInPath "govendor_linux_amd64" "${cache}/govendor/bin"
+ensureInPath "govendor_linux_amd64" "${cache_dir}/govendor/bin"
 
 eval "$(setupGOPATH ${name})"
 vendorJSON="${src}/vendor/vendor.json"
