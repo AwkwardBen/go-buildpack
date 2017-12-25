@@ -51,7 +51,7 @@ setupGOPATH() {
     echo "src=${src}"
 }
 
-name=$(<${vendorJSON} jq -r .rootPath)
+name="$(<${vendorJSON} jq -r '.rootPath')"
 echo "first ${name}"
 eval "$(setupGOPATH ${name})"
 vendorJSON="${src}/vendor/vendor.json"
