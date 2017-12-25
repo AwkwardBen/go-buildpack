@@ -36,6 +36,8 @@ setupGOPATH() {
     local name="${1}"
     local t="$(mktemp -d)"
 
+    echo "this is a value ${name}"
+
     cp -R ${build_dir}/* ${t}
     GOPATH="${t}/.go"
     echo export GOBIN="${build_dir}/bin"
@@ -49,7 +51,6 @@ setupGOPATH() {
     echo "src=${src}"
 }
 
-echo "this is actually happening"
 name=$(<${vendorJSON} jq -r .rootPath)
 eval "$(setupGOPATH ${name})"
 vendorJSON="${src}/vendor/vendor.json"
