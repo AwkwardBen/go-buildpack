@@ -63,19 +63,3 @@ downloadFile() {
     popd &> /dev/null
 }
 
-setupGOPATH() {
-    local name="${1}"
-    local t="$(mktemp -d)"
-
-    cp -R ${build_dir}/* ${t}
-    GOPATH="${t}/.go"
-    echo export GOBIN="${build_dir}/bin"
-
-    src="${GOPATH}/src/${name}"
-    mkdir -p "${src}"
-    mkdir -p "${build_dir}/bin"
-    mv -t "${src}" "${t}"/*
-
-    echo "GOPATH=${GOPATH}"
-    echo "src=${src}"
-}
