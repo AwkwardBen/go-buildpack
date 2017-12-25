@@ -14,6 +14,7 @@ ensureInPath "jq-linux64" "${cache_dir}/.jq/bin"
 
 DefaultGoVersion="$(<${DataJSON} jq -r '.Go.DefaultVersion')"
 GovendorVersion="$(<${DataJSON} jq -r '.Govendor.DefaultVersion')"
+vendorJSON="${build_dir}/vendor/vendor.json"
 goPath="${cache_dir}/${DefaultGoVersion}/go"
    
 rm -rf ${cache_dir}/*
@@ -22,18 +23,15 @@ goFile="${DefaultGoVersion}.linux-amd64.tar.gz"
 ensureFile "${goFile}" "${goPath}" "tar -C ${goPath} --strip-components=1 -zxf"
 rm -f "${goPath}/${goFile}"
 
-echo "part 1"
 export GOROOT="${goPath}"
 export PATH="${goPath}/bin:${PATH}"
 
-echo "part 2"
 mkdir -p "${build_dir}/bin"
 
 export GOPATH
 
 ensureInPath "govendor_linux_amd64" "${cache_dir}/govendor/bin"
 
-echo "part 3"
 setupGOPATH() {
     local name="${1}"
     local t="$(mktemp -d)"
@@ -52,6 +50,7 @@ setupGOPATH() {
 }
 
 echo "this is actually happening"
+name=$(<${vendorJSON} jq -r .rootPath)
 eval "$(setupGOPATH ${name})"
 vendorJSON="${src}/vendor/vendor.json"
 
